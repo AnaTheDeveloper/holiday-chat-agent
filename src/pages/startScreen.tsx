@@ -1,7 +1,14 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { HolidayDestinationType } from "../models/holidayDestination.model";
 
-export default function StartScreen() {
+export type StartScreenType = {
+  handleNextButtonCallback: Function;
+};
+
+export default function StartScreen({ handleNextButtonCallback }: StartScreenType) {
+  const [name, setName] = useState<string>("");
+  const [holidayData, setHolidayData] = useState<HolidayDestinationType[]>([]);
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -19,6 +26,8 @@ export default function StartScreen() {
         const formattedHolidayData = arrayOfHolidayDestinations(
           dataAsStringArrayArray
         );
+
+        setHolidayData(formattedHolidayData);
       };
 
       reader.readAsText(file);
@@ -79,15 +88,29 @@ export default function StartScreen() {
     return finalFormattedHolidayData;
   };
 
+  const handleClickNext = () => {
+    handleNextButtonCallback(name, holidayData);
+  };
+
   return (
     <div
-      className="h-full w-full flex items-center justify-center
-    flex-col gap-4"
+      className="h-full w-full flex items-center justify-center flex-col gap-4"
     >
       <p>Lets Get Started</p>
+
+      {(name.length === 0 || holidayData.length === 0) && (
+        <p>Please enter a name and upload a file</p>
+      )}
+
       <div className="flex justify-center items-center  flex-col gap-4 ">
         <label>Whats your name?</label>
-        <input type="text" className="border border-black pl-2"></input>
+        <input
+          type="text"
+          className="border border-black pl-2"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
+        ></input>
       </div>
       <div className="flex justify-center items-center  flex-col gap-4 ">
         <label>Upload holiday CSV file!</label>
@@ -98,6 +121,16 @@ export default function StartScreen() {
           accept=".csv"
         ></input>
       </div>
+
+      {(name.length !== 0 && holidayData.length !== 0) && (
+        <button
+          onClick={handleClickNext}
+          className="border border-blue-800 px-1"
+        >
+          Next
+        </button>
+      )}
+
     </div>
   );
 }
