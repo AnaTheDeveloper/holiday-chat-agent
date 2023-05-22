@@ -2,7 +2,7 @@
 
 End Point Assessment - Holiday Chat Agent
 
-## Tech Stack
+# Tech Stack
 
 - React TS
 - Tailwind
