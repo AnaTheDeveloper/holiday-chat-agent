@@ -136,12 +136,17 @@ export default function StartScreen({
       </div>
 
       {name.length !== 0 && holidayData.length !== 0 && (
-        <button
-          onClick={handleClickNext}
-          className="border border-blue-800 px-1"
-        >
-          Next
-        </button>
+        <div
+          id="buttonContainer"
+          className="flex flex-row w-2/3 justify-end mt-4"
+        > 
+          <button
+            onClick={handleClickNext}
+            className="border border-blue-800 px-1"
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );

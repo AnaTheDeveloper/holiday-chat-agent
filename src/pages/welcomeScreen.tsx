@@ -15,7 +15,7 @@ export default function WelcomeScreen({
   holidayData,
   removeHolidayDataFileCallback,
   handleChatHistoryCallback,
-  resetChatHistoryCallback
+  resetChatHistoryCallback,
 }: WelcomeScreenType) {
   const [recommendedHoliday, setRecommendedHoliday] =
     useState<HolidayDestinationType[]>(holidayData);
@@ -50,9 +50,9 @@ export default function WelcomeScreen({
     setRecommendedHoliday(holidaysWithinBudget);
 
     const newChatMessage: QuestionsAndAnswersType = {
-      question: 'What your budget per night?',
-      answer: budget
-    }
+      question: "What your budget per night?",
+      answer: budget,
+    };
     handleChatHistoryCallback(newChatMessage);
 
     return isValidAwnser;
@@ -79,11 +79,11 @@ export default function WelcomeScreen({
       }
     }
     setRecommendedHoliday(holidaysWithinPreferedStarRating);
-    
+
     const newChatMessage: QuestionsAndAnswersType = {
-      question: 'What your minumin star rating you are happy to stay at?',
-      answer: preferedStarRating
-    }
+      question: "What is your prefered star rating?",
+      answer: preferedStarRating,
+    };
 
     handleChatHistoryCallback(newChatMessage);
     return isValidAwnser;
@@ -103,13 +103,30 @@ export default function WelcomeScreen({
   return (
     <div className="h-full w-full flex flex-col justify-start items-center gap-4 px-10 pt-4">
       {section === 0 && (
-        <>
-          <span>{`Welcome ${nameSetByUser}!`}</span>
-          <p className="text-center">
-            Get ready for an exhilarating and unforgettable adventure customized
-            just for you - we're thrilled to make it happen!
-          </p>
-          <div className="flex flex-row gap-4">
+        <div
+          id="sectionZeroContainer"
+          className="flex flex-col w-full items-center"
+        >
+          <div
+            id="welcomeIntroductionContainer"
+            className="flex flex-col items-center justify-center mb-4 w-2/3"
+          >
+            <span id="question" className="text-base">
+              {`Welcome ${nameSetByUser}!`}
+            </span>
+            <p
+              id="questionHelper"
+              className="p-2 font-light text-xs text-gray-500 justify-center items-center"
+            >
+              Get ready for an exhilarating and unforgettable adventure that is
+              customized just for you - we're thrilled to make it happen!
+            </p>
+          </div>
+
+          <div
+            id="buttonContainer"
+            className="flex flex-row justify-between w-2/3 items-center mt-4"
+          >
             <button
               onClick={handleBackClick}
               className="border border-blue-800 px-1"
@@ -126,113 +143,200 @@ export default function WelcomeScreen({
               Next
             </button>
           </div>
-        </>
+        </div>
       )}
-
       {section === 1 && (
-        <>
-          <div className="flex flex-col gap-4">
-            <p>What your budget per night?</p>
-            <p>Enter a number</p>
-
-            <div>
-              <label>Max Budget: £</label>
-              <input
-                type="text"
-                className={
-                  errorMsg
-                    ? "border border-red-600 ml-2"
-                    : "border border-black ml-2"
-                }
-                placeholder="00.00"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setBudget(+e.target.value);
-                }}
-              ></input>
-            </div>
-            <p>{errorMsg}</p>
-            <div className="flex flex-row gap-4">
-              <button
-                onClick={() => {
-                  if (handleBudgetQuestion()) {
-                    setErrorMessage("");
-                    setSection(2);
-                  } else {
-                    setErrorMessage("ERROR ERROR");
-                  }
-                }}
-                className="border border-blue-800 px-1"
-              >
-                Next
-              </button>
-            </div>
+        <div
+          id="sectionOneContainer"
+          className="flex flex-col w-full items-center"
+        >
+          <div
+            id="questionAndHelperContainer"
+            className="flex flex-col items-center justify-center mb-4"
+          >
+            <span id="question" className="text-base">
+              What is your budget per night?
+            </span>
+            <span
+              id="questionHelper"
+              className="p-2 font-light text-xs text-gray-500"
+            >
+              Enter a number
+            </span>
           </div>
-        </>
+
+          <div
+            id="answerContainer"
+            className="flex flex-row w-2/3 justify-center items-center"
+          >
+            <label id="budgetLabel" className="text-sm pr-1">
+              Max Budget: £{" "}
+            </label>
+            <input
+              id="budgetInput"
+              type="text"
+              placeholder="00.00"
+              className={
+                errorMsg
+                  ? "border border-solid border-red-600 rounded pl-2 focus:outline-none focus:border-gray-400"
+                  : "border border-solid border-gray-300 rounded pl-2 focus:outline-none focus:border-gray-400"
+              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setBudget(+e.target.value);
+              }}
+            />
+          </div>
+
+          <div
+            id="errorMessageContainer"
+            className="flex flex-col w-2/3 justify-center items-end pr-9"
+          >
+            <span className="text-red-600 text-xs">{errorMsg}</span>
+          </div>
+
+          <div
+            id="buttonContainer"
+            className="flex flex-row w-2/3 justify-end mt-4"
+          >
+            <button
+              onClick={() => {
+                if (handleBudgetQuestion()) {
+                  setErrorMessage("");
+                  setSection(2);
+                } else {
+                  setErrorMessage("ERROR ERROR");
+                }
+              }}
+              className="border border-blue-800 px-1"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       )}
       {section === 2 && (
-        <>
-          <div className="flex flex-col gap-4">
-            <p>What your minumin star rating you are happy to stay at?</p>
-            <p>Enter a number</p>
-            <div>
-              <label>Min star rating:</label>
-              <input
-                type="text"
-                className={
-                  errorMsg
-                    ? "border border-red-600 ml-2"
-                    : "border border-black ml-2"
-                }
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setPreferedStarRating(+e.target.value);
-                }}
-              ></input>
-            </div>
-            <p>{errorMsg}</p>
-
-            <div className="flex flex-row gap-4">
-              <button
-                onClick={() => {
-                  if (handleStarRatingQuestion()) {
-                    setErrorMessage("");
-                    setSection(3);
-                  } else {
-                    setErrorMessage("ERROR ERROR");
-                  }
-                }}
-                className="border border-blue-800 px-1"
-              >
-                Next
-              </button>
-            </div>
+        <div
+          id="sectionTwoContainer"
+          className="flex flex-col w-full items-center"
+        >
+          <div
+            id="questionAndHelperContainer"
+            className="flex flex-col items-center justify-center mb-4"
+          >
+            <span id="question" className="text-base">
+              What is your prefered star rating?
+            </span>
+            <span
+              id="questionHelper"
+              className="p-2 font-light text-xs text-gray-500"
+            >
+              Enter a number
+            </span>
           </div>
-        </>
+
+          <div
+            id="answerContainer"
+            className="flex flex-row w-2/3 justify-center items-center"
+          >
+            <label id="starRatingLabel" className="text-sm">
+              Min Star Rating:
+            </label>
+            <input
+              id="starRatingInput"
+              type="text"
+              className={
+                errorMsg
+                  ? "border border-solid border-red-600 rounded pl-2 focus:outline-none focus:border-gray-400"
+                  : "border border-solid border-gray-300 rounded pl-2 focus:outline-none focus:border-gray-400"
+              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setPreferedStarRating(+e.target.value);
+              }}
+            />
+          </div>
+
+          <div
+            id="errorMessageContainer"
+            className="flex flex-col w-2/3 justify-center items-end pr-9"
+          >
+            <span className="text-red-600 text-xs">{errorMsg}</span>
+          </div>
+
+          <div
+            id="buttonContainer"
+            className="flex flex-row w-2/3 justify-end mt-4"
+          >
+            <button
+              onClick={() => {
+                if (handleStarRatingQuestion()) {
+                  setErrorMessage("");
+                  setSection(3);
+                } else {
+                  setErrorMessage("ERROR ERROR");
+                }
+              }}
+              className="border border-blue-800 px-1"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       )}
       {section === 3 && (
-        <>
-          <div className="flex flex-col gap-4">
-            {recommendedHoliday.length !== 0 && (
-              <p>Heres your holiday destinations</p>
-            )}
-            <div className="flex flex-col gap-4 overflow-y-scroll max-h-52 ">
-              {recommendedHoliday.length !== 0 &&
-                recommendedHoliday.map((holiday) => {
-                  return (
-                    <p>
-                      {" "}
-                      Holuiday Destination: {holiday.country} for price: £
-                      {holiday.pricePerPerNight} with star rating:{" "}
-                      {holiday.starRating}
-                    </p>
-                  );
-                })}
+        <div
+          id="sectionThreeContainer"
+          className="flex flex-col w-full items-center"
+        >
+          <div
+            id="recomendedHolidayDestinationsContainer"
+            className="flex flex-col justify-center items-center gap-2 w-full p-4"
+          >
+            <div id="recomendedHolidayDestinationsTitle">
+              {recommendedHoliday.length !== 0 && (
+                <span className="p-2 font-medium text-2xl tracking-wide">
+                  Recommended Holiday Destinations!
+                </span>
+              )}
             </div>
 
-            {recommendedHoliday.length === 0 && (
-              <p>Sorry! We couldnt find anything</p>
-            )}
+            <div
+              id="recomendedHolidayResults"
+              className="flex flex-col gap-4 overflow-y-scroll max-h-52 w-full border-2 border-gray-200 rounded p-1"
+            >
+              {recommendedHoliday.length !== 0 && (
+                <table className="table-auto">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="border-b border-r text-left">Location</th>
+                      <th className="border-b border-r text-left">Price</th>
+                      <th className="border-b text-left">Star Rating</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recommendedHoliday.map((holiday, index) => (
+                      <tr key={index}>
+                        <td className="border-b text-left">
+                          {holiday.city ? holiday.city : holiday.country}
+                        </td>
+                        <td className="border-b text-left">{`£${holiday.pricePerPerNight}`}</td>
+                        <td className="border-b text-left">{`${holiday.starRating} stars`}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
 
-            <div className="flex flex-row gap-4">
+            <div id="noHolidayResultsContainer">
+              {recommendedHoliday.length === 0 && (
+                <span>Sorry! We couldnt find anything</span>
+              )}
+            </div>
+
+            <div
+              id="buttonContainer"
+              className="flex flex-row justify-center items-center mt-4"
+            >
               <button
                 onClick={handleStartAgain}
                 className="border border-blue-800 px-1"
@@ -241,7 +345,7 @@ export default function WelcomeScreen({
               </button>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
