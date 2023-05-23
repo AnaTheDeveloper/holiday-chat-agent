@@ -28,7 +28,7 @@ export default function WelcomeScreen({
   const [errorMsg, setErrorMessage] = useState<string>("");
 
   const temperatureOptions = ["cold", "mild", "hot"];
-
+  
   //Handle Questions
   const handleBudgetQuestion = () => {
     let isValidAwnser: boolean = true;

@@ -12,8 +12,8 @@ export default function ChatHistory({
       <div id="chatHistoryTitle" className="flex flex-col items-center">
         {(questionAndAnswer.length === 0 && (
           <div className="flex flex-col items-center justify-center">
-            <span className="text-gray-800 text-lg">Chat History</span>
-            <span className="text-gray-400 text-xs">Nothing to see here</span>
+            <span data-testid="chatHistoryInitialTitle-test" className="text-gray-800 text-lg">Chat History</span>
+            <span data-testid="chatHistoryInitialSubTitle-test"  className="text-gray-400 text-xs">Nothing to see here</span>
           </div>
         )) || (
           <span className="text-gray-800 text-lg">{name}'s Chat History</span>

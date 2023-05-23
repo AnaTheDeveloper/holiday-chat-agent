@@ -121,6 +121,7 @@ export default function StartScreen({
             type="text"
             className="border border-solid border-gray-300 rounded pl-2 focus:outline-none focus:border-gray-400 w-full"
             onChange={handleNameChange}
+            data-testid="nameInput-test"
           />
         </div>
 
@@ -131,6 +132,7 @@ export default function StartScreen({
             type="file"
             onChange={handleFileChange}
             accept=".csv"
+            data-testid="fileUpload-test"
           />
         </div>
       </div>
