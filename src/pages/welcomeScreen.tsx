@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { HolidayDestinationType } from "../models/holidayDestination.model";
 import { QuestionsAndAnswersType } from "../models/chatHistory.model";
+import { capitalizeFirstLetter } from "../utils/helperFunctions";
 
 export type WelcomeScreenType = {
   nameSetByUser: string;
@@ -28,8 +29,7 @@ export default function WelcomeScreen({
   const [errorMsg, setErrorMessage] = useState<string>("");
 
   const temperatureOptions = ["cold", "mild", "hot"];
-  
-  //Handle Questions
+
   const handleBudgetQuestion = () => {
     let isValidAwnser: boolean = true;
 
@@ -136,7 +136,7 @@ export default function WelcomeScreen({
             className="flex flex-col items-center justify-center mb-4 w-2/3"
           >
             <span id="question" className="text-base">
-              {`Welcome ${nameSetByUser}!`}
+              {`Welcome ${capitalizeFirstLetter(nameSetByUser)}!`}
             </span>
             <p
               id="questionHelper"
@@ -265,18 +265,6 @@ export default function WelcomeScreen({
             <label id="temperatureLabel" className="text-sm">
               Temperature:
             </label>
-            {/* <input
-              id="starRatingInput"
-              type="radio"
-              className={
-                errorMsg
-                  ? "border border-solid border-red-600 rounded pl-2 focus:outline-none focus:border-gray-400"
-                  : "border border-solid border-gray-300 rounded pl-2 focus:outline-none focus:border-gray-400"
-              }
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setTemperature(+e.target.value);
-              }}
-            /> */}
             {temperatureOptions.map((option) => (
               <div className="flex items-center ml-2" key={option}>
                 <input
@@ -439,7 +427,7 @@ export default function WelcomeScreen({
                           {holiday.city ? holiday.city : holiday.country}
                         </td>
                         <td className="border-b text-left text-sm">
-                          {holiday.tempRating.charAt(0).toUpperCase() + holiday.tempRating.slice(1)}
+                          {capitalizeFirstLetter(holiday.tempRating)}
                         </td>
                         <td className="border-b text-left text-sm">
                           {holiday.hotelName}

@@ -1,4 +1,5 @@
 import { ChatHistoryType } from "../models/chatHistory.model";
+import { capitalizeFirstLetter } from "../utils/helperFunctions";
 
 export default function ChatHistory({
   name,
@@ -12,14 +13,26 @@ export default function ChatHistory({
       <div id="chatHistoryTitle" className="flex flex-col items-center">
         {(questionAndAnswer.length === 0 && (
           <div className="flex flex-col items-center justify-center">
-            <span data-testid="chatHistoryInitialTitle-test" className="text-gray-800 text-lg">Chat History</span>
-            <span data-testid="chatHistoryInitialSubTitle-test"  className="text-gray-400 text-xs">Nothing to see here</span>
+            <span
+              data-testid="chatHistoryInitialTitle-test"
+              className="text-gray-800 text-lg"
+            >
+              Chat History
+            </span>
+            <span
+              data-testid="chatHistoryInitialSubTitle-test"
+              className="text-gray-400 text-xs"
+            >
+              Nothing to see here
+            </span>
           </div>
         )) || (
-          <span className="text-gray-800 text-lg">{name}'s Chat History</span>
+          <span className="flex flex-row text-gray-800 text-lg fixed border border-gray-50 rounded w-60 items-center justify-center bg-white">
+            {capitalizeFirstLetter(name)}'s Chat History
+          </span>
         )}
       </div>
-      <div id="chathistoryMessageContainer">
+      <div id="chathistoryMessageContainer" className="mt-2">
         {questionAndAnswer.length !== 0 &&
           questionAndAnswer.map((chatMessage) => {
             return (
