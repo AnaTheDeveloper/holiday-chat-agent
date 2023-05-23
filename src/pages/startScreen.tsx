@@ -106,7 +106,7 @@ export default function StartScreen({ handleNextButtonCallback }: StartScreenTyp
         <label>Whats your name?</label>
         <input
           type="text"
-          className="border border-black pl-2"
+          className="border border-solid rounded pl-2"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setName(e.target.value)
           }
@@ -115,7 +115,7 @@ export default function StartScreen({ handleNextButtonCallback }: StartScreenTyp
       <div className="flex justify-center items-center  flex-col gap-4 ">
         <label>Upload holiday CSV file!</label>
         <input
-          className="border border-black pl-2"
+          className="border border-solid rounded pl-2"
           type="file"
           onChange={handleFileChange}
           accept=".csv"
