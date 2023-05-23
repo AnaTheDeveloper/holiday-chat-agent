@@ -4,12 +4,16 @@ import Header from "./components/header";
 import StartScreen from "./pages/startScreen";
 import { HolidayDestinationType } from "./models/holidayDestination.model";
 import WelcomeScreen from "./pages/welcomeScreen";
+import {  QuestionsAndAnswersType } from "./models/chatHistory.model";
 
 function App() {
   // const [isCSVFileUploaded, setIsCSVFileUploaded] = useState<boolean>(false); //duplicated state does the same thing
 
   const [name, setName] = useState<string>("");
   const [holidayData, setHolidayData] = useState<HolidayDestinationType[]>([]);
+  const [chatHistory, setChatHistory] = useState<QuestionsAndAnswersType[]>([]);
+
+  //new call back function that will take in a new qestion and awnser and push it to the state 
 
   const handleNextbutton = (
     givenName: string,
@@ -19,9 +23,19 @@ function App() {
     setHolidayData(holidayData);
   };
 
-  const removeHolidayData = () => {
+  const removeHolidayDataFile = () => {
     setHolidayData([]);
   };
+
+  const removeChatHistory = () => {
+    setChatHistory([]);
+  }
+
+  const handleChatHistory = (newQuestionAndAnswer: QuestionsAndAnswersType) => {
+    setChatHistory([...chatHistory, newQuestionAndAnswer]);
+  };
+
+
 
   return (
     <>
@@ -37,13 +51,15 @@ function App() {
               <WelcomeScreen
                 nameSetByUser={name}
                 holidayData={holidayData}
-                removeHolidayDataCallback={removeHolidayData}
+                removeHolidayDataFileCallback={removeHolidayDataFile}
+                handleChatHistoryCallback={handleChatHistory}
+                resetChatHistoryCallBack={removeChatHistory}
               />
             )}
           </div>
 
           <div className="border-2 border-purple-700 w-full h-1/3 sm:w-1/3  sm:h-full flex items-center justify-center">
-            <ChatHistory chatMessages={[]} />
+            <ChatHistory name={name} questionAndAnswer={chatHistory} />
           </div>
         </div>
       </div>

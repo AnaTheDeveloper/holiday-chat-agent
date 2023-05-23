@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { HolidayDestinationType } from "../models/holidayDestination.model";
-import { log } from "console";
+import { QuestionsAndAnswersType } from "../models/chatHistory.model";
 
 export type WelcomeScreenType = {
   nameSetByUser: string;
   holidayData: HolidayDestinationType[];
-  removeHolidayDataCallback: Function;
+  removeHolidayDataFileCallback: Function;
+  handleChatHistoryCallback: Function;
+  resetChatHistoryCallBack: Function;
 };
 
 export default function WelcomeScreen({
   nameSetByUser,
   holidayData,
-  removeHolidayDataCallback,
+  removeHolidayDataFileCallback,
+  handleChatHistoryCallback,
+  resetChatHistoryCallBack
 }: WelcomeScreenType) {
   const [recommendedHoliday, setRecommendedHoliday] =
     useState<HolidayDestinationType[]>(holidayData);
@@ -20,27 +24,21 @@ export default function WelcomeScreen({
   const [budget, setBudget] = useState<number>(0);
   const [preferedStarRating, setPreferedStarRating] = useState<number>(0);
 
-  const [errorMsg, setErrorMessage] = useState<string>('');
+  const [errorMsg, setErrorMessage] = useState<string>("");
 
   //Handle Questions
-
   const handleBudgetQuestion = () => {
     let isValidAwnser: boolean = true;
 
-    if (budget <= 0)
-    {
-      isValidAwnser = false;
-      return isValidAwnser;
-      
-    }
-
-    if ( isNaN(budget))
-    {
+    if (budget <= 0) {
       isValidAwnser = false;
       return isValidAwnser;
     }
 
-    
+    if (isNaN(budget)) {
+      isValidAwnser = false;
+      return isValidAwnser;
+    }
 
     const holidaysWithinBudget: HolidayDestinationType[] = [];
 
@@ -50,26 +48,31 @@ export default function WelcomeScreen({
       }
     }
     setRecommendedHoliday(holidaysWithinBudget);
+
+    const newChatMessage: QuestionsAndAnswersType = {
+      question: 'What your budget per night?',
+      answer: budget
+    }
+
+    handleChatHistoryCallback(newChatMessage);
+   
+
+    //call the callback by creating a quesiton and awnser moderl and then passing it into callback
     return isValidAwnser;
-    
   };
 
   const handleStarRatingQuestion = () => {
     let isValidAwnser: boolean = true;
 
-    if (preferedStarRating <= 0 || preferedStarRating >= 6)
-    {
-      isValidAwnser = false;
-      return isValidAwnser;  
-    }
-
-    if ( isNaN(preferedStarRating))
-    {
-      console.log('validating NaN');
+    if (preferedStarRating <= 0 || preferedStarRating >= 6) {
       isValidAwnser = false;
       return isValidAwnser;
     }
- 
+
+    if (isNaN(preferedStarRating)) {
+      isValidAwnser = false;
+      return isValidAwnser;
+    }
 
     const holidaysWithinPreferedStarRating: HolidayDestinationType[] = [];
 
@@ -79,16 +82,24 @@ export default function WelcomeScreen({
       }
     }
     setRecommendedHoliday(holidaysWithinPreferedStarRating);
+    
+    const newChatMessage: QuestionsAndAnswersType = {
+      question: 'What your minumin star rating you are happy to stay at?',
+      answer: preferedStarRating
+    }
+
+    handleChatHistoryCallback(newChatMessage);
     return isValidAwnser;
   };
 
   //Buttons
   const handleBackClick = () => {
-    removeHolidayDataCallback();
+    removeHolidayDataFileCallback();
   };
 
   const handleStartAgain = () => {
     setRecommendedHoliday(holidayData);
+    resetChatHistoryCallBack();
     setSection(0);
   };
 
@@ -131,7 +142,11 @@ export default function WelcomeScreen({
               <label>Max Budget: £</label>
               <input
                 type="text"
-                className={errorMsg ? "border border-red-600 ml-2" : "border border-black ml-2"}
+                className={
+                  errorMsg
+                    ? "border border-red-600 ml-2"
+                    : "border border-black ml-2"
+                }
                 placeholder="00.00"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setBudget(+e.target.value);
@@ -142,14 +157,12 @@ export default function WelcomeScreen({
             <div className="flex flex-row gap-4">
               <button
                 onClick={() => {
-
-                  if(handleBudgetQuestion()) {
-                    setErrorMessage('')
-                    setSection(2)
+                  if (handleBudgetQuestion()) {
+                    setErrorMessage("");
+                    setSection(2);
                   } else {
-                    setErrorMessage('ERROR ERROR')
+                    setErrorMessage("ERROR ERROR");
                   }
-
                 }}
                 className="border border-blue-800 px-1"
               >
@@ -168,7 +181,11 @@ export default function WelcomeScreen({
               <label>Min star rating:</label>
               <input
                 type="text"
-                className={errorMsg ? "border border-red-600 ml-2" : "border border-black ml-2"}
+                className={
+                  errorMsg
+                    ? "border border-red-600 ml-2"
+                    : "border border-black ml-2"
+                }
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setPreferedStarRating(+e.target.value);
                 }}
@@ -179,14 +196,12 @@ export default function WelcomeScreen({
             <div className="flex flex-row gap-4">
               <button
                 onClick={() => {
-
-                  if(handleStarRatingQuestion()) {
-                    setErrorMessage('')
-                    setSection(3)
+                  if (handleStarRatingQuestion()) {
+                    setErrorMessage("");
+                    setSection(3);
                   } else {
-                    setErrorMessage('ERROR ERROR')
+                    setErrorMessage("ERROR ERROR");
                   }
-
                 }}
                 className="border border-blue-800 px-1"
               >
@@ -203,20 +218,19 @@ export default function WelcomeScreen({
               <p>Heres your holiday destinations</p>
             )}
             <div className="flex flex-col gap-4 overflow-y-scroll max-h-52 ">
-                      {recommendedHoliday.length !== 0 &&
-              recommendedHoliday.map((holiday) => {
-                return (
-                  <p>
-                    {" "}
-                    Holuiday Destination: {holiday.country} for price: £
-                    {holiday.pricePerPerNight} with star rating:{" "}
-                    {holiday.starRating}
-                  </p>
-                );
-              })}
-
+              {recommendedHoliday.length !== 0 &&
+                recommendedHoliday.map((holiday) => {
+                  return (
+                    <p>
+                      {" "}
+                      Holuiday Destination: {holiday.country} for price: £
+                      {holiday.pricePerPerNight} with star rating:{" "}
+                      {holiday.starRating}
+                    </p>
+                  );
+                })}
             </div>
-    
+
             {recommendedHoliday.length === 0 && (
               <p>Sorry! We couldnt find anything</p>
             )}
