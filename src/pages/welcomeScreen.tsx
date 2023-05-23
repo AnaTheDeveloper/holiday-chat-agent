@@ -67,7 +67,7 @@ export default function WelcomeScreen({
     const holidaysWithinTemperature: HolidayDestinationType[] = [];
 
     for (let i = 0; i < recommendedHoliday.length; i++) {
-      if (recommendedHoliday[i].tempRating <= temperature) {
+      if (recommendedHoliday[i].tempRating === temperature) {
         holidaysWithinTemperature.push(recommendedHoliday[i]);
       }
     }
@@ -140,7 +140,7 @@ export default function WelcomeScreen({
             </span>
             <p
               id="questionHelper"
-              className="p-2 font-light text-xs text-gray-500 justify-center items-center"
+              className="pt-4 font-light text-xs text-gray-500 justify-center items-center"
             >
               Get ready for an exhilarating and unforgettable adventure that is
               customized just for you - we're thrilled to make it happen!
