@@ -96,7 +96,7 @@ describe("Welcome Screen", () => {
     expect(screen.getByText(/welcome bob!/i)).toBeInTheDocument();
     expect(
       screen.getByText(
-        /get ready for an exhilarating and unforgettable adventure that is customized just for you \- we're thrilled to make it happen!/i
+        /get ready for an exhilarating and unforgettable adventure that is customized just for you - we're thrilled to make it happen!/i
       )
     ).toBeInTheDocument();
     expect(
