@@ -4,16 +4,12 @@ import Header from "./components/header";
 import StartScreen from "./pages/startScreen";
 import { HolidayDestinationType } from "./models/holidayDestination.model";
 import WelcomeScreen from "./pages/welcomeScreen";
-import {  QuestionsAndAnswersType } from "./models/chatHistory.model";
+import { QuestionsAndAnswersType } from "./models/chatHistory.model";
 
 function App() {
-  // const [isCSVFileUploaded, setIsCSVFileUploaded] = useState<boolean>(false); //duplicated state does the same thing
-
   const [name, setName] = useState<string>("");
   const [holidayData, setHolidayData] = useState<HolidayDestinationType[]>([]);
   const [chatHistory, setChatHistory] = useState<QuestionsAndAnswersType[]>([]);
-
-  //new call back function that will take in a new qestion and awnser and push it to the state 
 
   const handleNextbutton = (
     givenName: string,
@@ -27,22 +23,20 @@ function App() {
     setHolidayData([]);
   };
 
-  const removeChatHistory = () => {
-    setChatHistory([]);
-  }
-
   const handleChatHistory = (newQuestionAndAnswer: QuestionsAndAnswersType) => {
     setChatHistory([...chatHistory, newQuestionAndAnswer]);
   };
 
-
+  const resetChatHistory = () => {
+    setChatHistory([]);
+  };
 
   return (
-    <>
+    <div className="bg-stone-50">
       <Header />
-      <div className="pl-4 pr-4 pt-4 ">
-        <div className="border-2 border-red-700 h-screen  sm:h-[24rem]  flex gap-4 flex-col sm:flex-row">
-          <div className="border-2 border-green-700 w-full h-2/3 sm:w-2/3 sm:h-full flex  items-center justify-center flex-col gap-4">
+      <div className="pl-4 pr-4 pt-1">
+        <div className="flex flex-row gap-4 h-[24rem]">
+          <div className="flex flex-col w-2/3 h-full gap-4 items-center justify-center border border-gray-200 rounded bg-white">
             {holidayData.length === 0 && (
               <StartScreen handleNextButtonCallback={handleNextbutton} />
             )}
@@ -53,17 +47,16 @@ function App() {
                 holidayData={holidayData}
                 removeHolidayDataFileCallback={removeHolidayDataFile}
                 handleChatHistoryCallback={handleChatHistory}
-                resetChatHistoryCallBack={removeChatHistory}
+                resetChatHistoryCallback={resetChatHistory}
               />
             )}
           </div>
-
-          <div className="border-2 border-purple-700 w-full h-1/3 sm:w-1/3  sm:h-full flex items-center justify-center">
+          <div className="flex flex-col w-1/3 h-full gap-4 items-center justify-center border border-gray-200 rounded bg-white">
             <ChatHistory name={name} questionAndAnswer={chatHistory} />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

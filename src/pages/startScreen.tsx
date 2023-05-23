@@ -5,10 +5,15 @@ export type StartScreenType = {
   handleNextButtonCallback: Function;
 };
 
-export default function StartScreen({ handleNextButtonCallback }: StartScreenType) {
+export default function StartScreen({
+  handleNextButtonCallback,
+}: StartScreenType) {
+
+  //--STATE--//
   const [name, setName] = useState<string>("");
   const [holidayData, setHolidayData] = useState<HolidayDestinationType[]>([]);
 
+  //--PROCESS CSV FILE -- START--//
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -26,10 +31,8 @@ export default function StartScreen({ handleNextButtonCallback }: StartScreenTyp
         const formattedHolidayData = arrayOfHolidayDestinations(
           dataAsStringArrayArray
         );
-
         setHolidayData(formattedHolidayData);
       };
-
       reader.readAsText(file);
     }
   };
@@ -87,42 +90,52 @@ export default function StartScreen({ handleNextButtonCallback }: StartScreenTyp
     }
     return finalFormattedHolidayData;
   };
+  //--PROCESS CSV FILE -- END--//
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);    
+  };
 
   const handleClickNext = () => {
     handleNextButtonCallback(name, holidayData);
   };
 
   return (
-    <div
-      className="h-full w-full flex items-center justify-center flex-col gap-4"
-    >
-      <p>Lets Get Started</p>
+    <div className="h-full w-full flex items-center justify-start flex-col pt-4">
+      <div className="flex flex-col justify-center items-center">
+        <p className="p-2 font-medium text-3xl tracking-wide">
+          Lets get started!
+        </p>
 
-      {(name.length === 0 || holidayData.length === 0) && (
-        <p>Please enter a name and upload a file</p>
-      )}
-
-      <div className="flex justify-center items-center  flex-col gap-4 ">
-        <label>Whats your name?</label>
-        <input
-          type="text"
-          className="border border-solid rounded pl-2"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setName(e.target.value)
-          }
-        ></input>
-      </div>
-      <div className="flex justify-center items-center  flex-col gap-4 ">
-        <label>Upload holiday CSV file!</label>
-        <input
-          className="border border-solid rounded pl-2"
-          type="file"
-          onChange={handleFileChange}
-          accept=".csv"
-        ></input>
+        {(name.length === 0 || holidayData.length === 0) && (
+          <p className="p-2 font-light text-xs text-gray-500">
+            Please enter a name and upload a file
+          </p>
+        )}
       </div>
 
-      {(name.length !== 0 && holidayData.length !== 0) && (
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-center items-center flex-col gap-3">
+          <label className="text-base">What is your name?</label>
+          <input
+            type="text"
+            className="border border-solid border-gray-300 rounded pl-2 focus:outline-none focus:border-gray-400 w-full"
+            onChange={handleNameChange}
+          />
+        </div>
+
+        <div className="flex justify-center items-center  flex-col gap-3 ">
+          <label className="text-base">Upload holiday CSV file!</label>
+          <input
+            className="border border-solid border-gray-300 rounded focus:outline-none focus:border-gray-400"
+            type="file"
+            onChange={handleFileChange}
+            accept=".csv"
+          />
+        </div>
+      </div>
+
+      {name.length !== 0 && holidayData.length !== 0 && (
         <button
           onClick={handleClickNext}
           className="border border-blue-800 px-1"
@@ -130,7 +143,6 @@ export default function StartScreen({ handleNextButtonCallback }: StartScreenTyp
           Next
         </button>
       )}
-
     </div>
   );
 }

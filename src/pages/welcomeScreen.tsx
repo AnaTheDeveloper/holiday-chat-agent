@@ -7,7 +7,7 @@ export type WelcomeScreenType = {
   holidayData: HolidayDestinationType[];
   removeHolidayDataFileCallback: Function;
   handleChatHistoryCallback: Function;
-  resetChatHistoryCallBack: Function;
+  resetChatHistoryCallback: Function;
 };
 
 export default function WelcomeScreen({
@@ -15,7 +15,7 @@ export default function WelcomeScreen({
   holidayData,
   removeHolidayDataFileCallback,
   handleChatHistoryCallback,
-  resetChatHistoryCallBack
+  resetChatHistoryCallback
 }: WelcomeScreenType) {
   const [recommendedHoliday, setRecommendedHoliday] =
     useState<HolidayDestinationType[]>(holidayData);
@@ -53,11 +53,8 @@ export default function WelcomeScreen({
       question: 'What your budget per night?',
       answer: budget
     }
-
     handleChatHistoryCallback(newChatMessage);
-   
 
-    //call the callback by creating a quesiton and awnser moderl and then passing it into callback
     return isValidAwnser;
   };
 
@@ -99,15 +96,15 @@ export default function WelcomeScreen({
 
   const handleStartAgain = () => {
     setRecommendedHoliday(holidayData);
-    resetChatHistoryCallBack();
+    resetChatHistoryCallback();
     setSection(0);
   };
 
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center gap-4 px-10">
+    <div className="h-full w-full flex flex-col justify-start items-center gap-4 px-10 pt-4">
       {section === 0 && (
         <>
-          <p>Hi {nameSetByUser}!</p>
+          <span>{`Welcome ${nameSetByUser}!`}</span>
           <p className="text-center">
             Get ready for an exhilarating and unforgettable adventure customized
             just for you - we're thrilled to make it happen!
