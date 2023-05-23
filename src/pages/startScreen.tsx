@@ -109,7 +109,7 @@ export default function StartScreen({
 
         {(name.length === 0 || holidayData.length === 0) && (
           <p className="p-2 font-light text-xs text-gray-500">
-            Please enter a name and upload a file
+            Please enter your name and upload a file
           </p>
         )}
       </div>
@@ -142,7 +142,7 @@ export default function StartScreen({
         > 
           <button
             onClick={handleClickNext}
-            className="border border-blue-800 px-1"
+            className="bg-blue-800 hover:bg-blue-900 text-white font-bold py-1 px-2 rounded text-sm	"
           >
             Next
           </button>
@@ -150,4 +150,4 @@ export default function StartScreen({
       )}
     </div>
   );
-}
+};
