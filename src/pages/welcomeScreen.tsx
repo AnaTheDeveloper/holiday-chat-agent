@@ -5,12 +5,12 @@ import { capitalizeFirstLetter } from "../utils/helperFunctions";
 import { CSVLink } from "react-csv";
 
 type HolidayResultsType = {
-  location: string,
-  temperature: string,
-  hotel: string,
-  price: number,
-  star: number,
-}
+  location: string;
+  temperature: string;
+  hotel: string;
+  price: number;
+  star: number;
+};
 
 export type WelcomeScreenType = {
   nameSetByUser: string;
@@ -45,13 +45,11 @@ export default function WelcomeScreen({
     let isValidAwnser: boolean = true;
 
     if (budget <= 0) {
-      isValidAwnser = false;
-      return isValidAwnser;
+      return (isValidAwnser = false);
     }
 
     if (isNaN(budget)) {
-      isValidAwnser = false;
-      return isValidAwnser;
+      return (isValidAwnser = false);
     }
 
     const holidaysWithinBudget: HolidayDestinationType[] = [];
@@ -75,6 +73,10 @@ export default function WelcomeScreen({
   const handleTemperatureQuestion = () => {
     let isValidAwnser: boolean = true;
 
+    if (temperature === "") {
+      return (isValidAwnser = false);
+    }
+
     const holidaysWithinTemperature: HolidayDestinationType[] = [];
 
     for (let i = 0; i < recommendedHoliday.length; i++) {
@@ -97,13 +99,11 @@ export default function WelcomeScreen({
     let isValidAwnser: boolean = true;
 
     if (preferedStarRating <= 0 || preferedStarRating >= 6) {
-      isValidAwnser = false;
-      return isValidAwnser;
+      return isValidAwnser = false;
     }
 
     if (isNaN(preferedStarRating)) {
-      isValidAwnser = false;
-      return isValidAwnser;
+      return isValidAwnser = false;
     }
 
     const holidaysWithinPreferedStarRating: HolidayDestinationType[] = [];
@@ -141,11 +141,11 @@ export default function WelcomeScreen({
 
     for (let i = 0; i < holidayData.length; i++) {
       let originalObj = holidayData[i];
-      
-      let matchedObj = recommendedHoliday.find(function(obj) {
+
+      let matchedObj = recommendedHoliday.find(function (obj) {
         return obj.hotelName === originalObj.hotelName;
       });
-      
+
       if (matchedObj) {
         resultsDownload.push({
           location: originalObj.city ? originalObj.city : originalObj.country,
@@ -261,7 +261,12 @@ export default function WelcomeScreen({
             id="errorMessageContainer"
             className="flex flex-col w-2/3 justify-center items-end pr-9"
           >
-            <span className="text-red-600 text-xs" data-testid="errorMessage-test">{errorMsg}</span>
+            <span
+              className="text-red-600 text-xs"
+              data-testid="errorMessage-test"
+            >
+              {errorMsg}
+            </span>
           </div>
 
           <div
@@ -338,7 +343,12 @@ export default function WelcomeScreen({
             id="errorMessageContainer"
             className="flex flex-col w-2/3 justify-center items-end pr-9"
           >
-            <span className="text-red-600 text-xs" data-testid="errorMessage-test">{errorMsg}</span>
+            <span
+              className="text-red-600 text-xs"
+              data-testid="errorMessage-test"
+            >
+              {errorMsg}
+            </span>
           </div>
 
           <div
@@ -406,7 +416,12 @@ export default function WelcomeScreen({
             id="errorMessageContainer"
             className="flex flex-col w-2/3 justify-center items-end pr-9"
           >
-            <span className="text-red-600 text-xs" data-testid="errorMessage-test">{errorMsg}</span>
+            <span
+              className="text-red-600 text-xs"
+              data-testid="errorMessage-test"
+            >
+              {errorMsg}
+            </span>
           </div>
 
           <div
@@ -452,7 +467,8 @@ export default function WelcomeScreen({
                 onClick={handleSort}
                 className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium rounded-md"
               >
-                Sort star rating by {starRatingOrder === "asc" ? "asc ▲" : "desc ▼"}
+                Sort star rating by{" "}
+                {starRatingOrder === "asc" ? "asc ▲" : "desc ▼"}
               </button>
             </div>
 
@@ -520,15 +536,14 @@ export default function WelcomeScreen({
               <button
                 onClick={handleDownload}
                 className="bg-transparent text-sm	 hover:bg-blue-100 text-blue-800 font-semibold py-1 px-2 border border-blue-800 hover:border-transparent rounded"
-              >              
-              <CSVLink
-                data={recommendationsDownload}
-                filename={"recomendedHolidayDestinations.csv"}
               >
-                Download Holiday Recomendations
-              </CSVLink>
+                <CSVLink
+                  data={recommendationsDownload}
+                  filename={"recomendedHolidayDestinations.csv"}
+                >
+                  Download Holiday Recomendations
+                </CSVLink>
               </button>
-              
             </div>
           </div>
         </div>
