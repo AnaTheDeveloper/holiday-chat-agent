@@ -2,6 +2,7 @@ import { useState } from "react";
 import { HolidayDestinationType } from "../models/holidayDestination.model";
 import { QuestionsAndAnswersType } from "../models/chatHistory.model";
 import { capitalizeFirstLetter } from "../utils/helperFunctions";
+import { CSVLink } from "react-csv";
 
 export type WelcomeScreenType = {
   nameSetByUser: string;
@@ -21,12 +22,15 @@ export default function WelcomeScreen({
   const [recommendedHoliday, setRecommendedHoliday] =
     useState<HolidayDestinationType[]>(holidayData);
   const [section, setSection] = useState<number>(0);
+  const [errorMsg, setErrorMessage] = useState<string>("");
+
+  const [recommendationsDownload, setRecommendationsDownload] = useState([]);
+
+  // const [starRatingOrder, setStarRatingOrder] = useState("desc");
 
   const [budget, setBudget] = useState<number>(0);
   const [temperature, setTemperature] = useState<string>("");
   const [preferedStarRating, setPreferedStarRating] = useState<number>(0);
-
-  const [errorMsg, setErrorMessage] = useState<string>("");
 
   const temperatureOptions = ["cold", "mild", "hot"];
 
@@ -113,7 +117,41 @@ export default function WelcomeScreen({
     return isValidAwnser;
   };
 
-  //Buttons
+  // const handleSort = () => {
+  //   setStarRatingOrder(starRatingOrder === "asc" ? "desc" : "asc");
+  // };
+
+  // const sortedHoliday = recommendedHoliday.sort((a, b) => {
+  //   if (starRatingOrder === "asc") {
+  //     return a.starRating - b.starRating;
+  //   } else {
+  //     return b.starRating - a.starRating;
+  //   }
+  // });
+
+  const handleDownload = () => {
+    const resultsDownload: any[] = [];
+
+    for (let i = 0; i < holidayData.length; i++) {
+      let originalObj = holidayData[i];
+      
+      let matchedObj = recommendedHoliday.find(function(obj) {
+        return obj.hotelName === originalObj.hotelName;
+      });
+      
+      if (matchedObj) {
+        resultsDownload.push({
+          location: originalObj.city ? originalObj.city : originalObj.country,
+          temperature: originalObj.tempRating,
+          hotel: originalObj.hotelName,
+          price: originalObj.pricePerPerNight,
+          star: originalObj.starRating,
+        });
+      }
+    }
+    setRecommendationsDownload(resultsDownload);
+  };
+
   const handleBackClick = () => {
     removeHolidayDataFileCallback();
   };
@@ -390,16 +428,25 @@ export default function WelcomeScreen({
         >
           <div
             id="recomendedHolidayDestinationsContainer"
-            className="flex flex-col justify-center items-center gap-2 w-full p-4"
+            className="border flex flex-col justify-center items-center gap-2 w-full p-4"
           >
             {recommendedHoliday.length !== 0 && (
               <span
                 id="recomendedHolidayDestinationsTitle"
-                className="p-2 font-medium text-2xl tracking-wide"
+                className="p-2 font-medium text-xl tracking-wide"
               >
                 Recommended Holiday Destinations!
               </span>
             )}
+
+            {/* <div className="flex flex-row w-full justify-end items-center">
+              <button
+                onClick={handleSort}
+                className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium rounded-md"
+              >
+                Sort star rating by {starRatingOrder === "asc" ? "asc ▲" : "desc ▼"}
+              </button>
+            </div> */}
 
             {recommendedHoliday.length !== 0 && (
               <div
@@ -421,6 +468,7 @@ export default function WelcomeScreen({
                     </tr>
                   </thead>
                   <tbody>
+                    {/* {sortedHoliday.map((holiday, index) => ( */}
                     {recommendedHoliday.map((holiday, index) => (
                       <tr key={index}>
                         <td className="border-b text-left">
@@ -453,7 +501,7 @@ export default function WelcomeScreen({
 
             <div
               id="buttonContainer"
-              className="flex flex-row justify-center items-center mt-4"
+              className="flex flex-row justify-evenly w-full items-center mt-4"
             >
               <button
                 onClick={handleStartAgain}
@@ -461,6 +509,20 @@ export default function WelcomeScreen({
               >
                 Start again
               </button>
+
+              <button
+                onClick={handleDownload}
+                className="bg-transparent text-sm	 hover:bg-blue-100 text-blue-800 font-semibold py-1 px-2 border border-blue-800 hover:border-transparent rounded"
+              >              
+              <CSVLink
+                data={recommendationsDownload}
+                filename={"recomendedHolidayDestinations.csv"}
+                target="_blank"
+              >
+                Download Holiday Recomendations
+              </CSVLink>
+              </button>
+              
             </div>
           </div>
         </div>
