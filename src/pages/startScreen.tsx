@@ -8,11 +8,9 @@ export type StartScreenType = {
 export default function StartScreen({
   handleNextButtonCallback,
 }: StartScreenType) {
-  //--STATE--//
   const [name, setName] = useState<string>("");
   const [holidayData, setHolidayData] = useState<HolidayDestinationType[]>([]);
 
-  //--PROCESS CSV FILE -- START--//
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -29,15 +27,15 @@ export default function StartScreen({
         }
 
         const dataSplitByNewLine: string[] =
-          formattingHolidayDataByLines(contents);
+        seperateHolidayDataByNewLine(contents);
 
-        const dataAsStringArrayArray: string[][] =
-          newLineAsStringArray(dataSplitByNewLine);
+        const dataSplitByComma: string[][] =
+        seperateNewLinebyComma(dataSplitByNewLine);
 
-        const formattedHolidayData = arrayOfHolidayDestinations(
-          dataAsStringArrayArray
+        const finalFormattedHolidayData = applyHolidayDataToModel(
+          dataSplitByComma
         );
-        setHolidayData(formattedHolidayData);
+        setHolidayData(finalFormattedHolidayData);
       };
       reader.readAsText(file);
     }
@@ -60,24 +58,17 @@ export default function StartScreen({
     return requiredHeaders.every((header) => firstLine.includes(header));
   };
 
-  const formattingHolidayDataByLines = (holidayData: string): string[] => {
+  const seperateHolidayDataByNewLine = (holidayData: string): string[] => {
     const lines = holidayData.split("\n");
-
-    //Remove first item in array which is the column headers.
     lines.shift();
-
-    //Removes blank empty row from the end of the array.
     lines.pop();
-
     return lines;
   };
 
-  const newLineAsStringArray = (
+  const seperateNewLinebyComma = (
     holidayDataSplitByNewLine: string[]
   ): string[][] => {
     let newFormattedArray: string[][] = [];
-
-    //loop through the holidays data by new line and split by comma.
 
     for (let i = 0; i < holidayDataSplitByNewLine.length; i++) {
       const splitArrayByComma: string[] =
@@ -87,33 +78,32 @@ export default function StartScreen({
     return newFormattedArray;
   };
 
-  const arrayOfHolidayDestinations = (
-    dataArrayArray: string[][]
+  const applyHolidayDataToModel = (
+    dataSplitByComma: string[][]
   ): HolidayDestinationType[] => {
     let finalFormattedHolidayData: HolidayDestinationType[] = [];
 
-    for (let i = 0; i < dataArrayArray.length; i++) {
-      const reformattedPricePerNight: string = dataArrayArray[i][9]
+    for (let i = 0; i < dataSplitByComma.length; i++) {
+      const reformattedPricePerNight: string = dataSplitByComma[i][9]
         .replace("\r", "")
         .trim();
 
       let holidayDestination: HolidayDestinationType = {
-        holidayReference: Number(dataArrayArray[i][0]),
-        hotelName: dataArrayArray[i][1],
-        city: dataArrayArray[i][2],
-        continent: dataArrayArray[i][3],
-        country: dataArrayArray[i][4],
-        category: dataArrayArray[i][5],
-        starRating: Number(dataArrayArray[i][6]),
-        tempRating: dataArrayArray[i][7],
-        location: dataArrayArray[i][8],
+        holidayReference: Number(dataSplitByComma[i][0]),
+        hotelName: dataSplitByComma[i][1],
+        city: dataSplitByComma[i][2],
+        continent: dataSplitByComma[i][3],
+        country: dataSplitByComma[i][4],
+        category: dataSplitByComma[i][5],
+        starRating: Number(dataSplitByComma[i][6]),
+        tempRating: dataSplitByComma[i][7],
+        location: dataSplitByComma[i][8],
         pricePerPerNight: +reformattedPricePerNight,
       };
       finalFormattedHolidayData.push(holidayDestination);
     }
     return finalFormattedHolidayData;
   };
-  //--PROCESS CSV FILE -- END--//
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);

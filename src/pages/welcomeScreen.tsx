@@ -4,6 +4,14 @@ import { QuestionsAndAnswersType } from "../models/chatHistory.model";
 import { capitalizeFirstLetter } from "../utils/helperFunctions";
 import { CSVLink } from "react-csv";
 
+type HolidayResultsType = {
+  location: string,
+  temperature: string,
+  hotel: string,
+  price: number,
+  star: number,
+}
+
 export type WelcomeScreenType = {
   nameSetByUser: string;
   holidayData: HolidayDestinationType[];
@@ -24,9 +32,8 @@ export default function WelcomeScreen({
   const [section, setSection] = useState<number>(0);
   const [errorMsg, setErrorMessage] = useState<string>("");
 
+  const [starRatingOrder, setStarRatingOrder] = useState("desc");
   const [recommendationsDownload, setRecommendationsDownload] = useState([]);
-
-  // const [starRatingOrder, setStarRatingOrder] = useState("desc");
 
   const [budget, setBudget] = useState<number>(0);
   const [temperature, setTemperature] = useState<string>("");
@@ -117,21 +124,20 @@ export default function WelcomeScreen({
     return isValidAwnser;
   };
 
-  // const handleSort = () => {
-  //   setStarRatingOrder(starRatingOrder === "asc" ? "desc" : "asc");
-  // };
+  const handleSort = () => {
+    setStarRatingOrder(starRatingOrder === "asc" ? "desc" : "asc");
+  };
 
-  // const sortedHoliday = recommendedHoliday.sort((a, b) => {
-  //   if (starRatingOrder === "asc") {
-  //     return a.starRating - b.starRating;
-  //   } else {
-  //     return b.starRating - a.starRating;
-  //   }
-  // });
+  const sortedHoliday = recommendedHoliday.sort((a, b) => {
+    if (starRatingOrder === "asc") {
+      return a.starRating - b.starRating;
+    } else {
+      return b.starRating - a.starRating;
+    }
+  });
 
   const handleDownload = () => {
-    //TODO: Give type
-    const resultsDownload: any[] = [];
+    const resultsDownload: HolidayResultsType[] = [];
 
     for (let i = 0; i < holidayData.length; i++) {
       let originalObj = holidayData[i];
@@ -441,14 +447,14 @@ export default function WelcomeScreen({
               </span>
             )}
 
-            {/* <div className="flex flex-row w-full justify-end items-center">
+            <div className="flex flex-row w-full justify-end items-center">
               <button
                 onClick={handleSort}
                 className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium rounded-md"
               >
                 Sort star rating by {starRatingOrder === "asc" ? "asc ▲" : "desc ▼"}
               </button>
-            </div> */}
+            </div>
 
             {recommendedHoliday.length !== 0 && (
               <div
@@ -470,8 +476,7 @@ export default function WelcomeScreen({
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {sortedHoliday.map((holiday, index) => ( */}
-                    {recommendedHoliday.map((holiday, index) => (
+                    {sortedHoliday.map((holiday, index) => (
                       <tr key={index}>
                         <td className="border-b text-left">
                           {holiday.city ? holiday.city : holiday.country}
