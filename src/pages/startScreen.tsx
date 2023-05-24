@@ -8,7 +8,6 @@ export type StartScreenType = {
 export default function StartScreen({
   handleNextButtonCallback,
 }: StartScreenType) {
-
   //--STATE--//
   const [name, setName] = useState<string>("");
   const [holidayData, setHolidayData] = useState<HolidayDestinationType[]>([]);
@@ -21,6 +20,13 @@ export default function StartScreen({
 
       reader.onload = () => {
         const contents = reader.result as string;
+
+        if (!isCorrectCSVFile(contents)) {
+          alert(
+            "The uploaded .csv file is incorrect. Please attempt the upload again."
+          );
+          return;
+        }
 
         const dataSplitByNewLine: string[] =
           formattingHolidayDataByLines(contents);
@@ -35,6 +41,23 @@ export default function StartScreen({
       };
       reader.readAsText(file);
     }
+  };
+
+  const isCorrectCSVFile = (fileContents: string): boolean => {
+    const requiredHeaders = [
+      "HolidayReference",
+      "HotelName",
+      "City",
+      "Continent",
+      "Country",
+      "Category",
+      "StarRating",
+      "TempRating",
+      "Location",
+      "PricePerPerNight",
+    ];
+    const firstLine = fileContents.split("\n")[0];
+    return requiredHeaders.every((header) => firstLine.includes(header));
   };
 
   const formattingHolidayDataByLines = (holidayData: string): string[] => {
@@ -93,7 +116,7 @@ export default function StartScreen({
   //--PROCESS CSV FILE -- END--//
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);    
+    setName(event.target.value);
   };
 
   const handleClickNext = () => {
@@ -141,7 +164,7 @@ export default function StartScreen({
         <div
           id="buttonContainer"
           className="flex flex-row w-2/3 justify-end mt-4"
-        > 
+        >
           <button
             onClick={handleClickNext}
             className="bg-blue-800 hover:bg-blue-900 text-white font-bold py-1 px-2 rounded text-sm	"
@@ -152,4 +175,4 @@ export default function StartScreen({
       )}
     </div>
   );
-};
+}

@@ -130,6 +130,7 @@ export default function WelcomeScreen({
   // });
 
   const handleDownload = () => {
+    //TODO: Give type
     const resultsDownload: any[] = [];
 
     for (let i = 0; i < holidayData.length; i++) {
@@ -192,6 +193,7 @@ export default function WelcomeScreen({
             <button
               onClick={handleBackClick}
               className="bg-transparent text-sm	 hover:bg-blue-100 text-blue-800 font-semibold py-1 px-2 border border-blue-800 hover:border-transparent rounded"
+              data-testid="chooseNewFileButton-test"
             >
               Choose a new file
             </button>
@@ -253,7 +255,7 @@ export default function WelcomeScreen({
             id="errorMessageContainer"
             className="flex flex-col w-2/3 justify-center items-end pr-9"
           >
-            <span className="text-red-600 text-xs">{errorMsg}</span>
+            <span className="text-red-600 text-xs" data-testid="errorMessage-test">{errorMsg}</span>
           </div>
 
           <div
@@ -330,7 +332,7 @@ export default function WelcomeScreen({
             id="errorMessageContainer"
             className="flex flex-col w-2/3 justify-center items-end pr-9"
           >
-            <span className="text-red-600 text-xs">{errorMsg}</span>
+            <span className="text-red-600 text-xs" data-testid="errorMessage-test">{errorMsg}</span>
           </div>
 
           <div
@@ -398,7 +400,7 @@ export default function WelcomeScreen({
             id="errorMessageContainer"
             className="flex flex-col w-2/3 justify-center items-end pr-9"
           >
-            <span className="text-red-600 text-xs">{errorMsg}</span>
+            <span className="text-red-600 text-xs" data-testid="errorMessage-test">{errorMsg}</span>
           </div>
 
           <div
@@ -517,7 +519,6 @@ export default function WelcomeScreen({
               <CSVLink
                 data={recommendationsDownload}
                 filename={"recomendedHolidayDestinations.csv"}
-                target="_blank"
               >
                 Download Holiday Recomendations
               </CSVLink>

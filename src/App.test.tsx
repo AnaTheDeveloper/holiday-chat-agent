@@ -105,7 +105,91 @@ describe("Welcome Screen", () => {
     expect(screen.getByRole("button", { name: /next/i })).toBeInTheDocument();
   });
 
-  test.todo("choose a new file button can be clicked and moves back");
+  test("next button can be clicked and moves onto first question", () => {
+    render(<WelcomeScreen {...welcomeScreenFakeProps} />);
 
-  test.todo("next button can be clicked and moves onto next section");
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    expect(
+      screen.getByText(/what is your budget per night\?/i)
+    ).toBeInTheDocument();
+  });
+
+  test("user can complete budget question and click next", () => {
+    render(<WelcomeScreen {...welcomeScreenFakeProps} />);
+
+    //Go to budget question
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    const questionInput = screen.getByRole("textbox");
+
+    fireEvent.change(questionInput, { target: { value: "100" } });
+
+    const usersInput = screen.getByRole("textbox") as HTMLInputElement;
+
+    expect(usersInput.value).toBe("100");
+
+    //Go to next question
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+  });
+
+  test("user cannot move to temperature question if no budget input was given", () => {
+    render(<WelcomeScreen {...welcomeScreenFakeProps} />);
+
+    //Go to temperature question
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    expect(screen.getByTestId("errorMessage-test")).toBeInTheDocument();
+  });
+
+  test("user can complete the set of questions and display results", () => {
+    render(<WelcomeScreen {...welcomeScreenFakeProps} />);
+
+    //Go to budget question
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    //complete budget question
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "100" } });
+
+    //Go to temperature question
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    //Complete temperature question
+    fireEvent.click(screen.getByLabelText("mild"));
+    expect(screen.getByLabelText("mild")).toBeChecked();
+
+    //Go to star question
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    //Complete star question
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "3" } });
+
+    //Go to results
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+    //Results table renders
+    expect(screen.getByRole("table")).toBeInTheDocument();
+
+    //Table Headers render
+    expect(screen.getByRole("columnheader", {name: /location/i})).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", {name: /temperature/i})).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", {name: /hotel/i})).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", {name: /price per night/i})).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", {name: /star rating/i})).toBeInTheDocument();
+
+    //Table row renders with data
+    expect(screen.getByRole('row', {name: /rome mild winevalley £25 5 stars/i})).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /waikato mild forestretreat £89 4 stars/i})).toBeInTheDocument();
+    expect(screen.getByRole('row', {name: /new york mild applecity £27 3 stars/i})).toBeInTheDocument();
+
+    //Start again button renders
+    expect(
+      screen.getByRole("button", { name: /start again/i })
+    ).toBeInTheDocument();
+
+    //Download Holiday Recomendations button renders
+    expect(
+      screen.getByRole("link", { name: /download holiday recomendations/i })
+    ).toBeInTheDocument();
+  });
 });
