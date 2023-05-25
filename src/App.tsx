@@ -35,7 +35,7 @@ function App() {
     <div className="bg-stone-50">
       <Header />
       <div className="pl-4 pr-4 pt-1">
-        <div className="flex flex-row gap-4 h-[24rem]">
+        <div className="flex flex-row gap-4 h-[26rem]">
           <div className="flex flex-col w-2/3 h-full gap-4 items-center justify-center border border-gray-200 rounded bg-white">
             {holidayData.length === 0 && (
               <StartScreen handleNextButtonCallback={handleNextbutton} />

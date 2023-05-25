@@ -99,11 +99,11 @@ export default function WelcomeScreen({
     let isValidAwnser: boolean = true;
 
     if (preferedStarRating <= 0 || preferedStarRating >= 6) {
-      return isValidAwnser = false;
+      return (isValidAwnser = false);
     }
 
     if (isNaN(preferedStarRating)) {
-      return isValidAwnser = false;
+      return (isValidAwnser = false);
     }
 
     const holidaysWithinPreferedStarRating: HolidayDestinationType[] = [];
@@ -451,7 +451,7 @@ export default function WelcomeScreen({
         >
           <div
             id="recomendedHolidayDestinationsContainer"
-            className="border flex flex-col justify-center items-center gap-2 w-full p-4"
+            className="flex flex-col justify-center items-center gap-2 w-full p-4"
           >
             {recommendedHoliday.length !== 0 && (
               <span
