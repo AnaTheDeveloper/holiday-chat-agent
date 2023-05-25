@@ -9,6 +9,11 @@ import App from "./App";
 import WelcomeScreen, { WelcomeScreenType } from "./pages/welcomeScreen";
 import { testHolidayData } from "./utils/testHolidayData";
 import Header from "./components/header";
+import StartScreen, { StartScreenType } from "./pages/startScreen";
+
+const startScreenFakeProps: StartScreenType = {
+  handleNextButtonCallback: jest.fn(),
+};
 
 const welcomeScreenFakeProps: WelcomeScreenType = {
   nameSetByUser: "bob",
@@ -46,29 +51,6 @@ describe("App", () => {
     expect(inputtedName.value).toBe("ana");
   });
 
-  test("a user can upload a .csv file", async () => {
-    const file = new File(["holidayData"], "hollidayData.csv", { type: "csv" });
-
-    render(<App />);
-
-    let input = screen.getByTestId("fileUpload-test");
-
-    await waitFor(() => {
-      // eslint-disable-next-line testing-library/no-wait-for-side-effects
-      fireEvent.change(input, {
-        target: { files: [file] },
-      });
-    });
-
-    let uploadedFile = screen.getByTestId(
-      "fileUpload-test"
-    ) as HTMLInputElement;
-
-    expect(screen.getByText(/upload holiday csv file!/i)).toBeInTheDocument();
-    expect(uploadedFile.files![0].name).toBe("hollidayData.csv");
-    expect(uploadedFile.files!.length).toBe(1);
-  });
-
   test("the chat history initially renders with no chat", async () => {
     render(<App />);
 
@@ -86,6 +68,35 @@ describe("Header", () => {
     render(<Header />);
     expect(screen.getByText(/first holiday ltd/i)).toBeInTheDocument();
     expect(screen.getByText(/holiday chat agent/i)).toBeInTheDocument();
+  });
+});
+
+describe("Start Screen", () => {
+  test("a user can upload a .csv file", async () => {
+
+    const file = new File(["holidayData"], "hollidayData.csv", { type: "csv" });
+
+    render(<StartScreen {...startScreenFakeProps} />);
+
+    // eslint-disable-next-line testing-library/no-debugging-utils
+    screen.logTestingPlaygroundURL();
+
+    let input = screen.getByTestId("fileUpload-test");
+
+    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-wait-for-side-effects
+      fireEvent.change(input, {
+        target: { files: [file] },
+      });
+    });
+
+    let uploadedFile = screen.getByTestId(
+      "fileUpload-test"
+    ) as HTMLInputElement;
+
+    expect(screen.getByText(/upload holiday csv file!/i)).toBeInTheDocument();
+    expect(uploadedFile.files![0].name).toBe("hollidayData.csv");
+    expect(uploadedFile.files!.length).toBe(1);
   });
 });
 
