@@ -279,7 +279,7 @@ export default function WelcomeScreen({
                   setErrorMessage("");
                   setSection(2);
                 } else {
-                  setErrorMessage("ERROR ERROR");
+                  setErrorMessage("Please enter a number above 0");
                 }
               }}
               className="bg-blue-800 hover:bg-blue-900 text-white font-bold py-1 px-2 rounded text-sm	"
@@ -361,7 +361,7 @@ export default function WelcomeScreen({
                   setErrorMessage("");
                   setSection(3);
                 } else {
-                  setErrorMessage("ERROR ERROR");
+                  setErrorMessage("Please select an option");
                 }
               }}
               className="bg-blue-800 hover:bg-blue-900 text-white font-bold py-1 px-2 rounded text-sm	"
@@ -434,7 +434,7 @@ export default function WelcomeScreen({
                   setErrorMessage("");
                   setSection(4);
                 } else {
-                  setErrorMessage("ERROR ERROR");
+                  setErrorMessage("Please enter a number between 1 - 5");
                 }
               }}
               className="bg-blue-800 hover:bg-blue-900 text-white font-bold py-1 px-2 rounded text-sm	"
