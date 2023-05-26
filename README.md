@@ -1,4 +1,4 @@
-# Holiday Chat Agent
+# Baltic Apprenticehsips
 
 End Point Assessment - Holiday Chat Agent
 
@@ -6,3 +6,4 @@ End Point Assessment - Holiday Chat Agent
 
 - React TS
 - Tailwind
+- React-CSV
